@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activities.DetailActivity">
+
+
+    <ImageView
+        android:id="@+id/detail_yellow_image"
+        android:layout_width="1000dp"
+        android:layout_height="1000dp"
+
+        android:layout_below="@id/toolbar_detail_task"
+        android:layout_marginStart="-200dp"
+        android:layout_marginTop="-925dp"
+        android:layout_marginEnd="-200dp"
+        android:src="@drawable/yellow_circle" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_detail_task"
+        android:background="@color/yellow"
+        android:layout_width="match_parent"
+        app:titleTextColor="@color/black"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title=" "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/CustomToolbarStyle"/>
+
+
+    <LinearLayout
+        android:id="@+id/ll_detail_heading"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/detail_yellow_image"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/detail_page_image"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/blackboy"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_marginStart="5dp">
+
+            <LinearLayout
+                android:id="@+id/detail_page_taskAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/taskNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="5"
+                    />
+
+                <TextView
+                    android:id="@+id/taskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Tasks" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_page_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Personal"
+                android:textSize="35sp"
+                android:textColor="#1b1b1b"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_detail_heading"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:visibility="visible"
+        tools:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/blankPageText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No task added yet!!"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/objectID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="gone"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@color/teal_200"
+        android:src="@drawable/ic_baseline_add"
+        app:tint="@color/white"
+        android:contentDescription="Add task button" />
+
+</RelativeLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_plana_cv_main_marginStartEnd">8dp</dimen>
+    <dimen name="item_plana_cv_corner_radius">7dp</dimen>
+    <dimen name="item_plana_cv_elevation">3dp</dimen>
+    <dimen name="item_plana_content_padding">5dp</dimen>
+    <dimen name="item_plana_circular_image_size">50dp</dimen>
+    <dimen name="item_plana_ll_marginStart">10dp</dimen>
+    <dimen name="item_plana_ll_marginEnd">2dp</dimen>
+    <dimen name="item_plana_detail_ll_marginStart">2dp</dimen>
+    <dimen name="item_plana_title_textSize">16sp</dimen>
+    <dimen name="item_plana_description_textSize">14sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>

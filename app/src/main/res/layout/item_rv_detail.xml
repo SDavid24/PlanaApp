@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="@dimen/item_plana_content_padding">
+
+
+            <CheckBox
+                android:id="@+id/cb_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="1dp"
+                android:paddingEnd="0dp"
+                android:layout_marginEnd="-10dp"/>
+
+
+            <TextView
+                android:id="@+id/tvTaskDetail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/item_plana_title_textSize"
+                tools:text="Change your picture" />
+
+
+            <ImageView
+                android:id="@+id/ivDelete"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:contentDescription="image"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_delete_grey" />
+
+
+            <TextView
+                android:id="@+id/detailTaskID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:textSize="@dimen/item_plana_description_textSize"
+                android:textColor="@color/item_plana_description_text_color"
+                tools:text="10"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+        </LinearLayout>
+
+</LinearLayout>
