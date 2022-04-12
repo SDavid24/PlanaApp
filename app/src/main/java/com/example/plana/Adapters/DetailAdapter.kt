@@ -1,28 +1,30 @@
 package com.example.plana.Adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Dao
+import com.example.plana.Activities.DetailActivity
+import com.example.plana.Activities.OverviewActivity
+import com.example.plana.Models.detailModel
 import com.example.plana.R
 import com.example.plana.RoomDetail.DetailDao
-import com.example.plana.RoomDetail.DetailDatabase
 import com.example.plana.RoomDetail.DetailEntity
 import com.example.plana.RoomDetail.TaskList
 import kotlinx.android.synthetic.main.item_rv_detail.view.*
-import kotlinx.android.synthetic.main.item_rv_overview.view.*
-import java.nio.file.Paths.get
 
 class DetailAdapter(
+    val context: Context,
+    val detailDao : DetailDao
 
-   // private val updateListener : (id:Int)-> Unit,
-    private val deleteListener : (id:Int)-> Unit,
+    // private val updateListener : (id:Int)-> Unit,
+   // private val onItemDelete : (id: Int)-> Unit,
 
 ): RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
    // val arrayTaskList = ArrayList<DetailEntity>()
     val arrayTaskList = ArrayList<TaskList>()
+    var detailActivityModel: DetailEntity? = null
 
     var items  = mutableListOf<TaskList>()
     //val ivDelete = view.ivDelete
@@ -70,9 +72,21 @@ class DetailAdapter(
             holder.itemView.tvTaskDetail.text =  model.tasks
 
             holder.ivDelete.setOnClickListener {
-                //deleteListener.invoke(model.tasks[getItemId(position).toInt()].toInt())
-               // deleteListener.invoke(model.tasks[position].toString().toInt())
-               // deleteListener.invoke(model.toString().toInt())
+                //onItemDelete.invoke(model.tasks[getItemId(position).toInt()].toInt())
+                //onItemDelete.invoke(model.tasks[position].toString().toInt())
+                //onItemDelete.invoke(model.toString().toInt())
+                if(context is DetailActivity){
+                    context.deleteRecordDialog(position, detailDao)
+                    //notifyItemRemoved(position)
+
+                    notifyDataSetChanged()
+
+                   // var amount : Int =
+
+                        //context.taskAmountUpdate(detailDao)
+                }
+
+
             }
             //holder.bind(items[position])
 
@@ -84,6 +98,10 @@ class DetailAdapter(
         return items.size
     }
 
+    fun amount() : Int{
+        return getItemCount()
+
+    }
 
 /*
     fun removeAt(position: Int) {

@@ -8,15 +8,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.Serializable
 
-
 @Entity(tableName = "detail-table")
 data class DetailEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "Image") var image: Int,
-    @ColumnInfo(name = "Task amount ") var taskAmount: Int,
+    @ColumnInfo(name = "Image") var image: Int? = null,
+    @ColumnInfo(name = "Task amount ") var taskAmount: Int? = null,
     @ColumnInfo(name = "Category") var category: String = "",
-    @ColumnInfo(name = "Task list") var taskList: MutableList<TaskList>
+    @ColumnInfo(name = "Task list") var taskList: MutableList<TaskList> = mutableListOf<TaskList>()
 ) : Serializable
 
 data class TaskList(val tasks : String): Serializable

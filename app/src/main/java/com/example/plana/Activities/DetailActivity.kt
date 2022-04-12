@@ -4,16 +4,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils.indexOf
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatDrawableManager.get
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.plana.Adapters.DetailAdapter
-import com.example.plana.Models.detailModel
 import com.example.plana.R
 import com.example.plana.RoomDetail.DetailApp
 import com.example.plana.RoomDetail.DetailDao
@@ -21,8 +17,6 @@ import com.example.plana.RoomDetail.DetailEntity
 import com.example.plana.RoomDetail.TaskList
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.add_task_dialog.*
-import kotlinx.android.synthetic.main.item_rv_detail.*
-import kotlinx.android.synthetic.main.item_rv_overview.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -31,16 +25,11 @@ class DetailActivity : AppCompatActivity() {
     private val rv_detailing = mutableListOf<TaskList>()
     var detailActivityModel: DetailEntity? = null
 
-    // Adapter class is initialized and list is passed in the param.
-    /*val detailAdapter = DetailAdapter { deleteId ->
-        deleteRecordDialog(deleteId, detailDao)
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        val detailDao = (application as DetailApp).db.detailDao()
 
+        val detailDao = (application as DetailApp).db.detailDao()
 
         if (intent.hasExtra(OverviewActivity.EXTRA_TASK_DETAILS)) {
 
@@ -65,7 +54,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             //Sets the page image to the category's image that's clicked on
-            detail_page_image.setImageResource(detailActivityModel!!.image)
+            detail_page_image.setImageResource(detailActivityModel!!.image!!)
 
             //Sets the page header to the name of the category's that's clicked on
             detail_page_header.text = detailActivityModel!!.category
@@ -73,10 +62,6 @@ class DetailActivity : AppCompatActivity() {
             //Brings in the ID of the category into this activity which can
             //be used for further purposes
             objectID.text = detailActivityModel!!.id.toString()
-
-            //detailTaskID.text = rv_detailing.indexOf(
-            //).toString()
-
 
         }
 
@@ -106,9 +91,18 @@ class DetailActivity : AppCompatActivity() {
         setupListOfDataIntoRecyclerView(detailActivityModel?.taskList!! as ArrayList<TaskList>, detailDao)
 
 /*
-        ivDelete.setOnClickListener {
-            deleteRecordDialog(1, detailDao)
-        }*/
+        lifecycleScope.launch{
+            Log.e("Name of Thread:","${Thread.currentThread().name}")
+            detailDao.fetchTaskCategoryById(detailActivityModel!!.id).collect{
+                //Initializing the taskList to the  original taskList of the chosen category
+                val taskList = it.taskList
+                it.taskAmount = taskList.size
+
+               // overviewTaskCount(taskList)  //applying the taskCount function
+            }
+        }
+*/
+
 
     }
 
@@ -116,7 +110,6 @@ class DetailActivity : AppCompatActivity() {
      * Function is used show the list of inserted data.
      */
     private fun setupListOfDataIntoRecyclerView(
-       // list : MutableList<TaskList>,
         list : ArrayList<TaskList>,
         detailDao: DetailDao
 
@@ -134,9 +127,7 @@ class DetailActivity : AppCompatActivity() {
             rv_detail.layoutManager = LinearLayoutManager(this)
 
             // Adapter class is initialized and list is passed in the param.
-            val detailAdapter = DetailAdapter { deleteId ->
-                deleteRecordDialog(deleteId, detailDao)
-            }
+            val detailAdapter = DetailAdapter(this, detailDao)
             // adapter instance is set to the recyclerview to inflate the items.
             rv_detail.adapter = detailAdapter
             detailAdapter.setListData(newTaskList)
@@ -153,7 +144,6 @@ class DetailActivity : AppCompatActivity() {
             Log.i("Guess what?", "Task is empty!")
 
         }
-
     }
 
     private fun addCategoryDialog(id: Int, detailDao : DetailDao) {
@@ -180,6 +170,7 @@ class DetailActivity : AppCompatActivity() {
                 //Using coroutine to update the entry in the database
                 lifecycleScope.launch {
                     detailDao.update(detailActivityModel!!)
+                   // taskAmountUpdate(detailDao)  //updating the task amount in the database
                 }
 
                 Toast.makeText(applicationContext, "Task added", Toast.LENGTH_SHORT).show()
@@ -205,7 +196,8 @@ class DetailActivity : AppCompatActivity() {
     private fun taskCount(taskList: MutableList<TaskList>) : Int{
         //Initializing count to count function which COUNTS the number of tasks entry in a category
         val count : Int = taskList.count()
-        taskNumber.text = count.toString()
+        taskNumber.text  = count.toString()
+        detailActivityModel!!.taskAmount = taskNumber.text.toString().toInt() + 1
 
         //Conditional to display the correct word(task) regarding the amount of tasks
         if(count == 0 || count == 1) {
@@ -221,16 +213,6 @@ class DetailActivity : AppCompatActivity() {
     fun activityObjectID(): Int {
         return objectID.text.toString().toInt()
     }
-
-/*
-    override fun onItemClick(position: Int) {
-        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
-        val clickedItem: ExampleItem = exampleList[position]
-        clickedItem.text1 = "Clicked"
-        adapter.notifyItemChanged(position)
-
-    }*/
-
 
     /**Method to Delete the details in a  using an Alert Dialog*/
     fun deleteRecordDialog(id:Int, detailDao: DetailDao) {
@@ -259,7 +241,7 @@ class DetailActivity : AppCompatActivity() {
             //mutableListOf<TaskList>().removeAt(viewHolder.absoluteAdapterPosition)*/
             //val indexx = detailActivityModel?.taskList?
 
-            detailActivityModel?.taskList?.removeAt(0)
+            //detailActivityModel?.taskList?.removeAt(id)
 
             /*//val adapter = rv_detail.adapter as DetailAdapter
            // adapter.removeAt(viewHolder!!.adapterPosition)
@@ -267,7 +249,7 @@ class DetailActivity : AppCompatActivity() {
             */
 
             lifecycleScope.launch {
-                //detailActivityModel!!.taskList.removeAt(id)
+                detailActivityModel!!.taskList.removeAt(id)
 
                 detailDao.update(detailActivityModel!!)
             }
@@ -288,13 +270,28 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    /**Method to update the task amount in the database*/
 /*
-    fun posit() {
-        val position = mutableListOf<TaskList>()
-        position.get(3)
+    fun taskAmountUpdate(detailDao: DetailDao){
+        //detailActivityModel!!.taskAmount = taskList.size
 
-        return position
-        println(position)
+
+
+
+
+        lifecycleScope.launch{
+            Log.e("Name of Thread:","${Thread.currentThread().name}")
+            detailDao.fetchTaskCategoryById(detailActivityModel!!.id).collect{
+                //Initializing the taskList to the  original taskList of the chosen category
+                val taskList = it.taskList
+                it.taskAmount = taskList.size
+
+                // overviewTaskCount(taskList)  //applying the taskCount function
+            }
+        }
+
+
     }
 */
+
 }

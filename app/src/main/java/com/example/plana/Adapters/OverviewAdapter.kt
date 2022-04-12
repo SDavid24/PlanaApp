@@ -1,8 +1,6 @@
 package com.example.plana.Adapters
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,26 +8,19 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.plana.Activities.DetailActivity
-import com.example.plana.Activities.MainActivity
 import com.example.plana.Activities.OverviewActivity
 import com.example.plana.R
 import com.example.plana.RoomDetail.DetailDao
 import com.example.plana.RoomDetail.DetailEntity
-import com.example.plana.RoomDetail.TaskList
-import com.example.plana.RoomOverview.OverviewEntity
 import kotlinx.android.synthetic.main.item_rv_overview.view.*
-import java.text.FieldPosition
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 class OverviewAdapter(
     val context: Context,
     val list: ArrayList<DetailEntity>,
-    private val deleteListener : (id:Int)-> Unit
+    //private val deleteListener : (id:Int)-> Unit
 
 ) : RecyclerView.Adapter <OverviewAdapter.OverviewViewHolder>(){
     private var onClickListener: OnClickListener? = null
@@ -37,10 +28,12 @@ class OverviewAdapter(
 
 
     private var detailDao : DetailDao? = null
+    private var detailEntity : DetailEntity? = null
     val overviewActivity = OverviewActivity()
     //val deleteCategory = overviewActivity.deleteCategory()
 
     inner class OverviewViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        var num: Int? = null
         var id : TextView
         var category: TextView
         var description: TextView
@@ -55,23 +48,41 @@ class OverviewAdapter(
             description = view.findViewById(R.id.ovTaskNumber)
             menu = view.findViewById(R.id.textViewOptions)
 
-            menu.setOnClickListener { popupMenus(it, id.toString().toInt()) }
+            menu.setOnClickListener {
+                popupMenus(
+                    it,
+                    num!!
+                ) }
         }
 
 
-
-        private fun popupMenus(view: View?, positioning: Int) {
+        private fun popupMenus(view: View?
+                               , positioning: Int
+        ) {
 
             val position = list[adapterPosition]
-            val model = list[positioning]
+            //val model = list[positioning]
             val popupMenus = PopupMenu(context, view)
             popupMenus.inflate(R.menu.options_menu)
             popupMenus.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.delete -> {
 
-                        var id = deleteListener.invoke(model.id).toString().toInt()
-                        overviewActivity.deleteCategory(id, detailDao!!)
+                        if(context is OverviewActivity){
+                            context.deleteCategory(positioning, detailDao!!)
+                        }
+
+                        //al deleteCategory = overviewActivity.deleteCategory()
+                            /*lifecycleScope.launch{
+                                detailDao.delete(DetailEntity(id))
+
+                                //employeeDao.delete((id))
+
+                            }*/
+
+
+                        //var id = deleteListener.invoke(model.id).toString().toInt()
+                        //overviewActivity.deleteCategory(id, detailDao!!)
                         Toast.makeText(context , "Delete clicked" , Toast.LENGTH_SHORT).show()
 
                         // here are the logic to delete an item from the list
@@ -81,17 +92,17 @@ class OverviewAdapter(
                           adapter.notifyDataSetChanged()*/
 
 
-                         true
+                         //true
                     }
                     // in the same way you can implement others
                     R.id.item_2 -> {
                         Toast.makeText(context , "Item 2 clicked" , Toast.LENGTH_SHORT).show()
-                         true
+                         //true
                     }
                     R.id.item_3 -> {
                         Toast.makeText(context,
                             "item clicked", Toast.LENGTH_SHORT).show()
-                         true
+                         //true
                     }
                 }
                  false
@@ -122,7 +133,7 @@ class OverviewAdapter(
 
         if(holder is OverviewViewHolder){
             holder.itemView.ovTaskID.text = model.id.toString()
-            holder.itemView.rv_overview_image.setImageResource(model.image).toString()
+            holder.itemView.rv_overview_image.setImageResource(model.image!!).toString()
 
             holder.itemView.tvCategory.text = model.category
 
@@ -160,7 +171,7 @@ class OverviewAdapter(
                 when(it.itemId){
                     R.id.delete -> {
 
-                        deleteListener.invoke(model.id)
+                        //deleteListener.invoke(model.id)
                         Toast.makeText(context , "Delete clicked" , Toast.LENGTH_SHORT).show()
 
                         // here are the logic to delete an item from the list
@@ -191,8 +202,6 @@ class OverviewAdapter(
             menu.javaClass.getDeclaredMethod("setForceShowIcon",Boolean::class.java)
                 .invoke(menu,true)
         }
-
-
 
     }
 

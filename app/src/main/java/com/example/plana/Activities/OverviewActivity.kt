@@ -13,16 +13,12 @@ import androidx.core.view.iterator
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Index
 import com.example.plana.Adapters.OverviewAdapter
-import com.example.plana.Models.Overview_model
 import com.example.plana.R
 import com.example.plana.RoomDetail.DetailApp
 import com.example.plana.RoomDetail.DetailDao
 import com.example.plana.RoomDetail.DetailEntity
 import com.example.plana.RoomDetail.TaskList
-import com.example.plana.RoomOverview.OverviewDao
-import com.example.plana.RoomOverview.OverviewEntity
 import com.example.plana.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -32,19 +28,15 @@ import kotlinx.android.synthetic.main.activity_overview.*
 import kotlinx.android.synthetic.main.item_rv_overview.*
 import kotlinx.android.synthetic.main.nav_activity_main.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 
 class OverviewActivity : AppCompatActivity(){
-    private val detailDao = (application as DetailApp).db.detailDao()
-    var detailActivityModel: DetailEntity? = null
-
-//    private val detailActivity = DetailActivity()
 
     // view binding for the activity
     private var _binding: ActivityMainBinding? = null
 
     lateinit var toggle: ActionBarDrawerToggle
+    private val detailActivityModel: DetailEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +45,9 @@ class OverviewActivity : AppCompatActivity(){
 
         setSupportActionBar(overview_toolbar)
         val detailDao = (application as DetailApp).db.detailDao()
+        //val detailActivityModel: DetailEntity? = null
 
-    //    var categoryID = detailActivityModel!!.id
+        //    var categoryID = detailActivityModel!!.id
        // val overviewDao = (application as OverviewApp).db.overviewDao()
 
         /** to call the set and customize the action bar**/
@@ -145,7 +138,7 @@ class OverviewActivity : AppCompatActivity(){
              //   val taskList = list.
              //   taskCount(taskList)
 
-                generateDummyList(list)
+                generateDummyList(list, detailDao)
             }
         }
 
@@ -170,7 +163,7 @@ class OverviewActivity : AppCompatActivity(){
 
     /** Method to set up the recyclerViewList on the screen*/
     private fun generateDummyList(
-        overviewList: ArrayList<DetailEntity>,
+        overviewList: ArrayList<DetailEntity>, detailDao: DetailDao
     ) : ArrayList<DetailEntity>
     {
 
@@ -178,9 +171,10 @@ class OverviewActivity : AppCompatActivity(){
         rv_overview.setHasFixedSize(true)
 
         val overviewAdapter = OverviewAdapter(applicationContext, overviewList
-        ) { deleteId ->
-            deleteCategory(deleteId, detailDao)
-        }
+        )
+         /*{ deleteId ->
+            deleteCategory(deleteId, detailDao!!)
+        }*/
         rv_overview.adapter = overviewAdapter
 
        // ovTaskNumber.text = (detailActivityModel!!.taskList.size).toString()
@@ -288,23 +282,27 @@ class OverviewActivity : AppCompatActivity(){
 
             }
 
-
         }
 
     }
+
 
 
     fun deleteCategory(id: Int, detailDao: DetailDao){
         //val id = ovTaskID.text.toString().toInt()
+        val image = rv_overview_image
+        val taskAmount = ovTaskNumber
+        val initTaskList = mutableListOf<TaskList>().toString().toInt()
         lifecycleScope.launch{
-            detailActivityModel
             detailDao.delete(DetailEntity(id))
-            //employeeDao.delete((id))
 
+            detailActivityModel!!.taskAmount!!.minus(1)
+            //employeeDao.delete((id))
 
         }
 
     }
+
 /*
     private fun taskAmount() {
         lifecycleScope.launch{

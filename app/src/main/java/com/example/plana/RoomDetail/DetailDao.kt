@@ -1,7 +1,6 @@
 package com.example.plana.RoomDetail
 
 import androidx.room.*
-import com.example.plana.RoomOverview.OverviewEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

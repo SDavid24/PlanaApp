@@ -125,7 +125,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:visibility="gone"
-        tools:visibility="gone"
+        tools:visibility="visible"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
