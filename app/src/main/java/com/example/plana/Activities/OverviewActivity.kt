@@ -157,28 +157,28 @@ class OverviewActivity : AppCompatActivity(){
 
         val overviewAdapter = OverviewAdapter(applicationContext, overviewList
         )
+        //Calling the delete record dialog function here
+        {
+            deleteId ->
+            deleteRecordDialog(deleteId, detailDao)
+        }
 
         rv_overview.adapter = overviewAdapter
 
         /**method to ensure every row in the recyclerview that's clicked
-         * either links to the detail page or pops up the delete record dialog
-         * depending on the on that's not commented out*/
+         * links to the detail page*/
         overviewAdapter.setOnClickListener(object : OverviewAdapter.OnClickListener{
             override fun onClick(position: Int, model: DetailEntity) {
 
                 //links to the detail page
-/*                val intent = Intent(this@OverviewActivity,
+/*
+                val intent = Intent(this@OverviewActivity,
                     DetailActivity::class.java)
 
                 intent.putExtra(EXTRA_TASK_DETAILS, model )
                 startActivity(intent)*/
 
-
-                //pops up the delete record dialog
-                deleteRecordDialog(position, detailDao)
-
             }
-
         })
 
         return overviewList
@@ -199,8 +199,7 @@ class OverviewActivity : AppCompatActivity(){
         /**This decides what should happen when we click on the "Yes" button*/
         builder.setPositiveButton("Yes") { dialogInterface, _ ->
             lifecycleScope.launch {
-                detailDao.delete(DetailEntity(id))
-
+                detailDao.delete(DetailEntity(id)) //The main that is in charge of deleting the category
                 Toast.makeText(
                     applicationContext,
                     "Record deleted successfully", Toast.LENGTH_LONG
@@ -267,7 +266,6 @@ class OverviewActivity : AppCompatActivity(){
         }
 
     }
-
 
 /*
     fun deleteCategory(id: Int, detailDao: DetailDao){
