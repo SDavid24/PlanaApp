@@ -22,29 +22,15 @@ class DetailAdapter(
    // private val onItemDelete : (id: Int)-> Unit,
 
 ): RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
-   // val arrayTaskList = ArrayList<DetailEntity>()
     val arrayTaskList = ArrayList<TaskList>()
     var detailActivityModel: DetailEntity? = null
 
     var items  = mutableListOf<TaskList>()
-    //val ivDelete = view.ivDelete
-
-     /*fun onClick(v: View?) {
-        val position = absoluteAdapterPosition
-        if (position != RecyclerView.NO_POSITION) {
-            listener.onItemClick(position)
-        }
-    }*/
 
     class DetailViewHolder(view: View ): RecyclerView.ViewHolder(view) {
-        var taskList = view.tvTaskDetail
 
         var ivDelete = view.ivDelete
-/*
-        fun bind(data: TaskList) {
-            taskList.text = data.tasks
 
-        }*/
 
     }
 
@@ -64,31 +50,22 @@ class DetailAdapter(
     override fun onBindViewHolder(holder: DetailAdapter.DetailViewHolder, position: Int) {
         val model = items[position]
 
-      //  val detailEntity : DetailEntity? = null
-
         if(holder is DetailViewHolder) {
             holder.itemView.detailTaskID.text = getItemId(position).toString()
 
             holder.itemView.tvTaskDetail.text =  model.tasks
 
             holder.ivDelete.setOnClickListener {
-                //onItemDelete.invoke(model.tasks[getItemId(position).toInt()].toInt())
-                //onItemDelete.invoke(model.tasks[position].toString().toInt())
-                //onItemDelete.invoke(model.toString().toInt())
+
                 if(context is DetailActivity){
                     context.deleteRecordDialog(position, detailDao)
                     //notifyItemRemoved(position)
 
                     notifyDataSetChanged()
 
-                   // var amount : Int =
-
-                        //context.taskAmountUpdate(detailDao)
                 }
 
-
             }
-            //holder.bind(items[position])
 
         }
 
@@ -97,26 +74,6 @@ class DetailAdapter(
     override fun getItemCount(): Int {
         return items.size
     }
-
-    fun amount() : Int{
-        return getItemCount()
-
-    }
-
-/*
-    fun removeAt(position: Int) {
-
-        val dbHandler = DetailDatabase
-        val isDeleted = DetailDatabase(items[position])
-
-        if (isDeleted > 0) {
-            exampleList.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-*/
-
-
 
 }
 

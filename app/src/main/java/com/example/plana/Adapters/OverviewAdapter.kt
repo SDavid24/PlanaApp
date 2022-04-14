@@ -9,6 +9,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.plana.Activities.DetailActivity
 import com.example.plana.Activities.OverviewActivity
 import com.example.plana.R
 import com.example.plana.RoomDetail.DetailDao
@@ -33,7 +34,6 @@ class OverviewAdapter(
     //val deleteCategory = overviewActivity.deleteCategory()
 
     inner class OverviewViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        var num: Int? = null
         var id : TextView
         var category: TextView
         var description: TextView
@@ -50,17 +50,14 @@ class OverviewAdapter(
 
             menu.setOnClickListener {
                 popupMenus(
-                    it,
-                    num!!
+                    it
                 ) }
         }
 
-
-        private fun popupMenus(view: View?
-                               , positioning: Int
-        ) {
+        private fun popupMenus(view: View?) {
 
             val position = list[adapterPosition]
+            val int = id.text.toString().toInt()
             //val model = list[positioning]
             val popupMenus = PopupMenu(context, view)
             popupMenus.inflate(R.menu.options_menu)
@@ -68,9 +65,14 @@ class OverviewAdapter(
                 when(it.itemId){
                     R.id.delete -> {
 
+/*
+                        if(context is OverviewActivity){
+                            context.deleteRecordDialog(int, detailDao!!)
+                        }*/
+/*
                         if(context is OverviewActivity){
                             context.deleteCategory(positioning, detailDao!!)
-                        }
+                        }*/
 
                         //al deleteCategory = overviewActivity.deleteCategory()
                             /*lifecycleScope.launch{
@@ -79,7 +81,6 @@ class OverviewAdapter(
                                 //employeeDao.delete((id))
 
                             }*/
-
 
                         //var id = deleteListener.invoke(model.id).toString().toInt()
                         //overviewActivity.deleteCategory(id, detailDao!!)
@@ -90,7 +91,6 @@ class OverviewAdapter(
                         /*val tempLang = exampleList[position]
                           exampleList.remove(tempLang)
                           adapter.notifyDataSetChanged()*/
-
 
                          //true
                     }
@@ -126,7 +126,6 @@ class OverviewAdapter(
     }
 
 
-
     override fun onBindViewHolder(holder: OverviewViewHolder, position: Int) {
 
         val model = list[position]
@@ -150,14 +149,28 @@ class OverviewAdapter(
                     holder.itemView.ovTaskText.text = "tasks"
                 }
 
-
             }
+
 
             //Finally, add an onclickListener to the item
             holder.itemView.setOnClickListener{
-                if(onClickListener != null){
+
+                if(onClickListener != null) {
                     onClickListener!!.onClick(position, model)
+
                 }
+
+
+/*
+                if(context is OverviewActivity){
+                    context.deleteRecordDialog(position, detailDao!!)
+                    //notifyItemRemoved(position)
+
+                    notifyDataSetChanged()
+
+                }
+*/
+
             }
 
         }

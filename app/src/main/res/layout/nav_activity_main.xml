@@ -9,7 +9,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-
     <include
         android:id="@+id/activity_overview_in_nav"
         layout="@layout/activity_overview"

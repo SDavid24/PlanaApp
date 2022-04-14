@@ -17,6 +17,7 @@ import com.example.plana.RoomDetail.DetailEntity
 import com.example.plana.RoomDetail.TaskList
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.add_task_dialog.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -87,21 +88,8 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-        //setupListOfDataIntoRecyclerView(detailActivityModel?.taskList!!, detailDao)
+        //calling the setup recycler view function
         setupListOfDataIntoRecyclerView(detailActivityModel?.taskList!! as ArrayList<TaskList>, detailDao)
-
-/*
-        lifecycleScope.launch{
-            Log.e("Name of Thread:","${Thread.currentThread().name}")
-            detailDao.fetchTaskCategoryById(detailActivityModel!!.id).collect{
-                //Initializing the taskList to the  original taskList of the chosen category
-                val taskList = it.taskList
-                it.taskAmount = taskList.size
-
-               // overviewTaskCount(taskList)  //applying the taskCount function
-            }
-        }
-*/
 
 
     }
@@ -197,7 +185,9 @@ class DetailActivity : AppCompatActivity() {
         //Initializing count to count function which COUNTS the number of tasks entry in a category
         val count : Int = taskList.count()
         taskNumber.text  = count.toString()
-        detailActivityModel!!.taskAmount = taskNumber.text.toString().toInt() + 1
+        //detailActivityModel!!.taskAmount = taskNumber.text.toString().toInt() + 1
+
+        detailActivityModel!!.taskAmount = taskList.count() + 1 //equating taskAmount from the entity to the the taskList count
 
         //Conditional to display the correct word(task) regarding the amount of tasks
         if(count == 0 || count == 1) {
@@ -221,36 +211,12 @@ class DetailActivity : AppCompatActivity() {
         builder.setTitle("Delete Record")
 
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-       /* val task = tvTaskDetail.text.toString()
-
-        val taskList = mutableListOf<TaskList>()
-        
-        val hobbies = ArrayList<TaskList>()*/
-
 
         /**This decides what should happen when we click on the "Yes" button*/
         builder.setPositiveButton("Yes") { dialogInterface, _ ->
 
-           /*// detailActivityModel?.taskList?.removeAt(id)
-            //hobbies.remove(TaskList(tvTaskDetail.toString())
-            Log.e("size of Task list", "${detailActivityModel?.taskList?.size}")
-            Log.e("Task list position 1", "${detailActivityModel?.taskList?.get(1)}")
-            //taskList.removeAt(1)
-            //val viewHolder : RecyclerView.ViewHolder = DetailAdapter.DetailViewHolder(rv_detail)
-
-            //mutableListOf<TaskList>().removeAt(viewHolder.absoluteAdapterPosition)*/
-            //val indexx = detailActivityModel?.taskList?
-
-            //detailActivityModel?.taskList?.removeAt(id)
-
-            /*//val adapter = rv_detail.adapter as DetailAdapter
-           // adapter.removeAt(viewHolder!!.adapterPosition)
-           // rv_detailing.removeAt(0)
-            */
-
             lifecycleScope.launch {
                 detailActivityModel!!.taskList.removeAt(id)
-
                 detailDao.update(detailActivityModel!!)
             }
 
@@ -274,9 +240,6 @@ class DetailActivity : AppCompatActivity() {
 /*
     fun taskAmountUpdate(detailDao: DetailDao){
         //detailActivityModel!!.taskAmount = taskList.size
-
-
-
 
 
         lifecycleScope.launch{

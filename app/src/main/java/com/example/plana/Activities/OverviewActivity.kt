@@ -1,6 +1,7 @@
 package com.example.plana.Activities
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -36,16 +37,16 @@ class OverviewActivity : AppCompatActivity(){
     private var _binding: ActivityMainBinding? = null
 
     lateinit var toggle: ActionBarDrawerToggle
-    private val detailActivityModel: DetailEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ///_binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.nav_activity_main)
+        //setContentView(R.layout.activity_overview)
 
         setSupportActionBar(overview_toolbar)
         val detailDao = (application as DetailApp).db.detailDao()
-        //val detailActivityModel: DetailEntity? = null
+        val detailActivityModel: DetailEntity? = null
 
         //    var categoryID = detailActivityModel!!.id
        // val overviewDao = (application as OverviewApp).db.overviewDao()
@@ -53,6 +54,7 @@ class OverviewActivity : AppCompatActivity(){
         /** to call the set and customize the action bar**/
         setSupportActionBar(overview_toolbar)
         val actionbar = supportActionBar
+
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true)
             // actionbar.title = "Add Task"
@@ -72,7 +74,7 @@ class OverviewActivity : AppCompatActivity(){
 
        // categoryID = ovCategoryID()
 
-        supportActionBar?.setHomeButtonEnabled(true)
+        //supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.elevation = 0F //To remove the shadow beneath the activity toolbar
 
         rv_overview.setHasFixedSize(true)
@@ -116,27 +118,10 @@ class OverviewActivity : AppCompatActivity(){
         // call addRecord with detailDao
         addCategory(5, detailDao)
 
-      //  var categoryIndex = detailActivity.
-
-
-        /*lifecycleScope.launch{
-            detailDao.fetchTaskCategoryById(ovCategoryID()).collect{
-                //Initializing the taskList to the  original taskList of the chosen category
-                val taskList = it.taskList
-                overviewTaskCount(taskList)  //applying the taskCount function
-            }
-        }*/
-
-
         /**Coroutine that helps the room database setup the data into the recyclerview */
         lifecycleScope.launch{
             detailDao.fetchAllTaskCategory().collect {
-
-               // taskHeaderAmount.text =
                 val list = ArrayList(it)
-
-             //   val taskList = list.
-             //   taskCount(taskList)
 
                 generateDummyList(list, detailDao)
             }
@@ -172,70 +157,66 @@ class OverviewActivity : AppCompatActivity(){
 
         val overviewAdapter = OverviewAdapter(applicationContext, overviewList
         )
-         /*{ deleteId ->
-            deleteCategory(deleteId, detailDao!!)
-        }*/
+
         rv_overview.adapter = overviewAdapter
 
-       // ovTaskNumber.text = (detailActivityModel!!.taskList.size).toString()
-      //  ovTaskNumber.text = (detailActivityModel!!.taskList.size).toString()
-
         /**method to ensure every row in the recyclerview that's clicked
-         * links to the detail page*/
+         * either links to the detail page or pops up the delete record dialog
+         * depending on the on that's not commented out*/
         overviewAdapter.setOnClickListener(object : OverviewAdapter.OnClickListener{
             override fun onClick(position: Int, model: DetailEntity) {
-                val intent = Intent(this@OverviewActivity,
+
+                //links to the detail page
+/*                val intent = Intent(this@OverviewActivity,
                     DetailActivity::class.java)
 
                 intent.putExtra(EXTRA_TASK_DETAILS, model )
-                startActivity(intent)
+                startActivity(intent)*/
+
+
+                //pops up the delete record dialog
+                deleteRecordDialog(position, detailDao)
+
             }
 
         })
 
-
-        Log.i("Recyclerview:", "GenerateDummyList Launched")
-
-        rv_overview.setOnClickListener {
-            val intent = Intent(this@OverviewActivity,
-                DetailActivity::class.java)
-
-            startActivity(intent)
-        }
-
-/*
-        // This binds the edit feature class to recyclerview
-        val editSwipeHandler = object : SwipeToEditCallback(this){
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // This below Calls the adapter function when it is swiped for edit
-                val adapter = rv_detail.adapter as OverviewAdapter
-                adapter.notifyEditItem(this@OverviewActivity,
-                    viewHolder.adapterPosition, ADD_ACTIVITY_REQUEST_CODE)
-            }
-        }
-        val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
-        editItemTouchHelper.attachToRecyclerView(rv_overview)
-
-        // This binds the delete feature class to recyclerview)
-        val deleteSwipeHandler = object  : SwipeToDeleteCallback(this){
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // This below Calls the adapter function when it is swiped for delete
-                val adapter = rv_overview.adapter as OverviewAdapter
-                adapter.removeAt(viewHolder.adapterPosition)
-
-                getTodoList() // Gets the latest list from the local database after item being delete from it.
-            }
-        }
-        val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
-        deleteItemTouchHelper.attachToRecyclerView(rv_overview)*/
-
         return overviewList
     }
-/*
-    fun ovCategoryID(): Int {
-        val mIndex =
-    }*/
 
+
+    /**Needs attention!!!
+     * Delete dialog to display when an item is clicked on in the recycler view
+     * And also tries to carry out the delete whole  category function*/
+    fun deleteRecordDialog( id:Int, detailDao: DetailDao) {
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+        // builder.show()
+        builder.setTitle("Delete Record")
+
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        /**This decides what should happen when we click on the "Yes" button*/
+        builder.setPositiveButton("Yes") { dialogInterface, _ ->
+            lifecycleScope.launch {
+                detailDao.delete(DetailEntity(id))
+
+                Toast.makeText(
+                    applicationContext,
+                    "Record deleted successfully", Toast.LENGTH_LONG
+                ).show()
+            }
+            dialogInterface.dismiss()
+        }
+
+        /**This decides what should happen when we click on the "No" button*/
+        builder.setNegativeButton("No") { dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+
+        builder.show()
+
+    }
 
     /**Method to insert the details in a row using*/
      fun addCategory(size: Int, detailDao: DetailDao) {
@@ -278,7 +259,8 @@ class OverviewActivity : AppCompatActivity(){
                     image = image, category = category,
                     taskAmount = taskAmountDB,
                     taskList = initTaskList
-                ))
+
+                    ))
 
             }
 
@@ -287,7 +269,7 @@ class OverviewActivity : AppCompatActivity(){
     }
 
 
-
+/*
     fun deleteCategory(id: Int, detailDao: DetailDao){
         //val id = ovTaskID.text.toString().toInt()
         val image = rv_overview_image
@@ -296,24 +278,13 @@ class OverviewActivity : AppCompatActivity(){
         lifecycleScope.launch{
             detailDao.delete(DetailEntity(id))
 
-            detailActivityModel!!.taskAmount!!.minus(1)
             //employeeDao.delete((id))
 
         }
 
     }
-
-/*
-    private fun taskAmount() {
-        lifecycleScope.launch{
-            detailDao.fetchTaskCategoryById(detailActivityModel!!.id).collect{
-                //Initializing the taskList to the original taskList of the chosen category
-                val taskList = it.taskList
-                overviewTaskCount(taskList)  //applying the taskCount function
-            }
-        }
-    }
 */
+
 
     /**method to make the hamburger button responsive when clicked*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
