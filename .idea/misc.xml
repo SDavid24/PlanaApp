@@ -5,10 +5,13 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_baseline_add.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_check.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_baseline_message.xml" value="0.2037037037037037" />
         <entry key="app/src/main/res/drawable/ic_baseline_rate_review_24.xml" value="0.2037037037037037" />
         <entry key="app/src/main/res/drawable/ic_baseline_settings.xml" value="0.17962962962962964" />
         <entry key="app/src/main/res/drawable/ic_baseline_share.xml" value="0.2037037037037037" />
+        <entry key="app/src/main/res/drawable/ic_category.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_menu_gallery.xml" value="0.17962962962962964" />
         <entry key="app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.17962962962962964" />
         <entry key="app/src/main/res/drawable/mybutton.xml" value="0.2" />
@@ -18,10 +21,14 @@
         <entry key="app/src/main/res/layout/activity_drawer.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10176511228796897" />
         <entry key="app/src/main/res/layout/activity_overview.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/add_category_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/add_category_fragment.xml" value="0.18342391304347827" />
         <entry key="app/src/main/res/layout/add_task_dialog.xml" value="0.13858695652173914" />
         <entry key="app/src/main/res/layout/app_bar_drawer.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/content_drawer.xml" value="0.1911231884057971" />
+        <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.16893115942028986" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.18297101449275363" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16168478260869565" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.18297101449275363" />
         <entry key="app/src/main/res/layout/item_rv_detail.xml" value="0.19746376811594202" />
         <entry key="app/src/main/res/layout/item_rv_overview.xml" value="0.33" />

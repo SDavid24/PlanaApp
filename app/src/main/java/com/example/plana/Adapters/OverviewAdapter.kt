@@ -27,6 +27,7 @@ class OverviewAdapter(
 ) : RecyclerView.Adapter <OverviewAdapter.OverviewViewHolder>(){
     private var onClickListener: OnClickListener? = null
 
+    lateinit var detailDao : DetailDao
     inner class OverviewViewHolder(view: View): RecyclerView.ViewHolder(view) {
         var id : TextView
         var category: TextView
@@ -50,8 +51,8 @@ class OverviewAdapter(
 
         private fun popupMenus(view: View?) {
 
+            detailDao = DetailApp().db.detailDao()
             val position = list[adapterPosition]
-            val int = id.text.toString().toInt()
             //val model = list[positioning]
             val popupMenus = PopupMenu(context, view)
             popupMenus.inflate(R.menu.options_menu)

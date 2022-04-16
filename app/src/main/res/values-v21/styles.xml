@@ -8,6 +8,7 @@
             <item name="android:windowFullscreen">false</item>
 
             <item name="android:statusBarColor">@android:color/transparent</item>
+            <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
 
         </style>
 </resources>

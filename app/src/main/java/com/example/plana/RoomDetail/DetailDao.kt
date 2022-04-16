@@ -21,4 +21,7 @@ interface DetailDao {
     @Query("SELECT * FROM `detail-table` where id =:id")
     fun fetchTaskCategoryById(id: Int): Flow<DetailEntity>
 
+    @Query("SELECT EXISTS (SELECT 1 FROM `detail-table` WHERE Category = :category)")
+    fun exists(category: String): Boolean
+
 }

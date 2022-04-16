@@ -15,4 +15,12 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="singular_task">Task</string>
     <string name="plural_tasks">Tasks</string>
+
+    <string-array name="Category">
+        <item>Today</item>
+        <item>Planned</item>
+        <item>Personal</item>
+        <item>Work</item>
+        <item>Shopping</item>
+    </string-array>
 </resources>
