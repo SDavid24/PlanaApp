@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
-    private val rv_detailing = mutableListOf<TaskList>()
     var detailActivityModel: DetailEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
