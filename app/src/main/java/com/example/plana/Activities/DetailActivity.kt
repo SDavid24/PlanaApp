@@ -1,12 +1,11 @@
 package com.example.plana.Activities
 
-import android.app.AlertDialog
 import android.app.Dialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.plana.Adapters.DetailAdapter
@@ -17,7 +16,6 @@ import com.example.plana.RoomDetail.DetailEntity
 import com.example.plana.RoomDetail.TaskList
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.add_task_dialog.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -168,7 +166,6 @@ class DetailActivity : AppCompatActivity() {
                 setupListOfDataIntoRecyclerView(detailActivityModel!!.taskList as ArrayList<TaskList>, detailDao)
 
                 addDialog.dismiss()  //dismiss the dialog
-
             }
 
         }
@@ -206,7 +203,7 @@ class DetailActivity : AppCompatActivity() {
 
     /**Method to Delete the details in a  using an Alert Dialog*/
     fun deleteRecordDialog(id:Int, detailDao: DetailDao) {
-        val builder = AlertDialog.Builder(this)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
         builder.setCancelable(false)
         builder.setTitle("Delete Record")
 
@@ -214,10 +211,11 @@ class DetailActivity : AppCompatActivity() {
 
         /**This decides what should happen when we click on the "Yes" button*/
         builder.setPositiveButton("Yes") { dialogInterface, _ ->
-
             lifecycleScope.launch {
                 detailActivityModel!!.taskList.removeAt(id)
+
                 detailDao.update(detailActivityModel!!)
+
             }
 
             Toast.makeText(

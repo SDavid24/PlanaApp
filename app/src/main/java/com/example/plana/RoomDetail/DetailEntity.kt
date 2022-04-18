@@ -30,7 +30,9 @@ class TaskListConverter{
         return if (value.isEmpty()){
             emptyList<TaskList>().toMutableList()
         }else{
-            val listType = object : TypeToken<MutableList<TaskList>>() {}.type
+            val listType = object : TypeToken<MutableList<TaskList>>() {
+
+            }.type
             Gson().fromJson(value,listType)
         }
     }

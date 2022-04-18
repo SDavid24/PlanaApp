@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plana.Activities.DetailActivity
-import com.example.plana.Activities.OverviewActivity
-import com.example.plana.Models.detailModel
 import com.example.plana.R
 import com.example.plana.RoomDetail.DetailDao
 import com.example.plana.RoomDetail.DetailEntity
@@ -18,19 +16,15 @@ class DetailAdapter(
     val context: Context,
     val detailDao : DetailDao
 
-    // private val updateListener : (id:Int)-> Unit,
-   // private val onItemDelete : (id: Int)-> Unit,
-
 ): RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     val arrayTaskList = ArrayList<TaskList>()
     var detailActivityModel: DetailEntity? = null
 
     var items  = mutableListOf<TaskList>()
 
-    class DetailViewHolder(view: View ): RecyclerView.ViewHolder(view) {
+     class DetailViewHolder(view: View ): RecyclerView.ViewHolder(view) {
 
         var ivDelete = view.ivDelete
-
 
     }
 
@@ -52,21 +46,17 @@ class DetailAdapter(
 
         if(holder is DetailViewHolder) {
             holder.itemView.detailTaskID.text = getItemId(position).toString()
-
             holder.itemView.tvTaskDetail.text =  model.tasks
-
             holder.ivDelete.setOnClickListener {
 
                 if(context is DetailActivity){
                     context.deleteRecordDialog(position, detailDao)
+
                     //notifyItemRemoved(position)
-
-                    notifyDataSetChanged()
-
+                    //notifyItemChanged(position)
+                    //notifyDataSetChanged()
                 }
-
             }
-
         }
 
     }

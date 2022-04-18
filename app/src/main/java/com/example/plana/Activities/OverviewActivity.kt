@@ -37,14 +37,10 @@ import kotlinx.coroutines.launch
 
 class OverviewActivity : AppCompatActivity(){
 
-    // view binding for the activity
-    private lateinit var binding: ActivityOverviewBinding
-
     lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(binding.root)
         setContentView(R.layout.nav_activity_main)
 
         setSupportActionBar(overview_toolbar)
@@ -155,13 +151,13 @@ class OverviewActivity : AppCompatActivity(){
         rv_overview.layoutManager = LinearLayoutManager(applicationContext)
         rv_overview.setHasFixedSize(true)
 
-        val overviewAdapter = OverviewAdapter(applicationContext, overviewList
-        )
+        val overviewAdapter = OverviewAdapter(this, overviewList,
+
         //Calling the delete record dialog function here
-        {
+        /*{
             deleteId ->
             deleteRecordDialog(deleteId, detailDao)
-        }
+        }*/ detailDao)
 
         rv_overview.adapter = overviewAdapter
 
@@ -170,13 +166,13 @@ class OverviewActivity : AppCompatActivity(){
         overviewAdapter.setOnClickListener(object : OverviewAdapter.OnClickListener{
             override fun onClick(position: Int, model: DetailEntity) {
 
-                //links to the detail page
-/*
+                //this links to the detail page
                 val intent = Intent(this@OverviewActivity,
                     DetailActivity::class.java)
 
+                //Takes the content of the recyclerview into the next activity
                 intent.putExtra(EXTRA_TASK_DETAILS, model )
-                startActivity(intent)*/
+                startActivity(intent)
 
             }
         })
@@ -199,7 +195,7 @@ class OverviewActivity : AppCompatActivity(){
         val arrayAdapter = ArrayAdapter(this, R.layout.dropdown_item, category)
 
         //Joining the autoCompleteTextView which is the dropdown edit text with the adapter
-        binding.autoCompleteTextView.setAdapter(arrayAdapter) //
+        binding.autoCompleteTextView.setAdapter(arrayAdapter)
 
         /**Determining what should happen if the customer clicks on yes after picking a category which in this case is to Add a category to the Database and also display in the RecyclerView
          */
@@ -374,14 +370,13 @@ class OverviewActivity : AppCompatActivity(){
 
     }
 
-
-    /**Needs attention!!!
+    /**
      * Delete dialog to display when an item is clicked on in the recycler view
      * And also tries to carry out the delete whole  category function*/
-    fun deleteRecordDialog( id:Int, detailDao: DetailDao) {
+    fun deleteRecordDialog(id:Int, detailDao: DetailDao) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
         builder.setCancelable(false)
-        builder.setTitle("Delete Record")
+        builder.setTitle("Delete category")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         /**This decides what should happen when we click on the "Yes" button*/
@@ -404,7 +399,6 @@ class OverviewActivity : AppCompatActivity(){
 
         builder.show()
     }
-
 
     /**method to make the hamburger button responsive when clicked*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -439,7 +433,6 @@ class OverviewActivity : AppCompatActivity(){
 
     companion object {
         val DETAIL_ACTIVITY_REQUEST_CODE = 1
-        val ADD_ACTIVITY_REQUEST_CODE = 2
         val EXTRA_TASK_DETAILS = "extra task details"
     }
 
